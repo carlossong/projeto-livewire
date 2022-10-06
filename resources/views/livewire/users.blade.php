@@ -36,6 +36,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="shadow-lg rounded-lg overflow-hidden">
+                    <button wire:click='newUser' class="ml-4 relative inline-flex items-center justify-center p-0.5 my-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-indigo-400 to-blue-600 group-hover:from-indigo-400 group-hover:to-blue-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-indigo-200">
+                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+                            Novo Usuário
+                        </span>
+                      </button>
                     <x-jet-input type="text" wire:model.debounce.300ms="search" id="search" class="m-4"
                         type="text" placeholder="Buscar usuário" autocomplete="nope" />
                     <div x-data class="p-4 grid md:grid-cols-2 gap-4">
