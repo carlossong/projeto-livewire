@@ -24,6 +24,26 @@ class PermissionSeeder extends Seeder
                 'id'    => 2,
                 'title' => 'client_access',
             ],
+            [
+                'id'    => 3,
+                'title' => 'role_access',
+            ],
+            [
+                'id'    => 4,
+                'title' => 'permission_access',
+            ],
+            [
+                'id'    => 5,
+                'title' => 'ticket_access',
+            ],
+            [
+                'id'    => 6,
+                'title' => 'product_access',
+            ],
+            [
+                'id'    => 7,
+                'title' => 'service_access',
+            ],
         ];
 
         Permission::insert($permissions);

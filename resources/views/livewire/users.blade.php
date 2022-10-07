@@ -62,7 +62,7 @@
                                         <div>
                                             @foreach ($user->roles as $role)
                                                 <span
-                                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-lg bg-green-100 text-green-800 items-center">
+                                                    class="px-2 mx-1 inline-flex text-xs leading-5 font-semibold rounded-lg bg-green-100 text-green-800 items-center">
                                                     {{ $role->title }}
                                                 </span>
                                             @endforeach
