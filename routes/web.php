@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Livewire\Roles;
 use App\Http\Livewire\Users;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +30,5 @@ Route::middleware([
     })->name('dashboard');
 
     Route::get('usuarios', Users::class)->name('users');
+    Route::get('hierarquias', Roles::class)->name('roles');
 });

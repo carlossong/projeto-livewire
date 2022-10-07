@@ -53,26 +53,23 @@
                     <x-jet-input type="text" wire:model.debounce.300ms="search" id="search" class="m-4"
                         type="text" placeholder="Buscar usuário" autocomplete="nope" />
                     <div x-data class="p-4 grid md:grid-cols-2 gap-4">
-                        @foreach ($this->users as $index => $user)
+                        @foreach ($this->roles as $index => $role)
                             <div x-data="{ opened_tab: null }" class="flex flex-col">
                                 <div class="flex flex-col border rounded shadow mb-2">
                                     <div @click="opened_tab = opened_tab == {{ $index }} ? null : {{ $index }} "
                                         class="text-sm font-medium text-gray-700 hover:text-gray-900 p-4 cursor-pointer flex justify-between hover:text-indigo-600 hover:text-base">
-                                        {{ $user->name }}
-                                        <div>
-                                            @foreach ($user->roles as $role)
-                                                <span
-                                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-lg bg-green-100 text-green-800 items-center">
-                                                    {{ $role->title }}
-                                                </span>
-                                            @endforeach
-                                        </div>
+                                        {{ $role->title }}
                                     </div>
                                     <div x-show="opened_tab=={{ $index }}" class="p-4 pb-4 text-gray-500">
                                         <div class="flex justify-between"
-                                            x-on:dblclick="$wire.doubleClick('{{ $user->id }}')">
-                                            <p>{{ $user->email }}</p>
-                                            <svg wire:click='confirmingUserDeletion({{ $user->id }})'
+                                            x-on:dblclick="$wire.doubleClick('{{ $role->id }}')">
+                                            @foreach ($role->permissions as $permission)
+                                                <span
+                                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-lg bg-green-100 text-green-800 items-center">
+                                                    {{ $permission->title }}
+                                                </span>
+                                            @endforeach
+                                            <svg wire:click='confirmingUserDeletion({{ $role->id }})'
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor"
                                                 class="w-6 h-6 hover:text-red-500">
@@ -86,74 +83,10 @@
                         @endforeach
                     </div>
                     <div class="m-4">
-                        {{ $this->users->links() }}
+                        {{ $this->roles->links() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- New User Modal -->
-    <x-jet-dialog-modal wire:model="openModalCreate">
-        <x-slot name="title">
-            @if ($form->id)
-                {{ __('Editar Usuário: ') }} {{ $form->name }}
-            @else
-                {{ __('Novo Usuários') }}
-            @endif
-        </x-slot>
-
-        <x-slot name="content">
-
-            <div class="space-y-4">
-
-                <!-- Name -->
-                <div class="mt-2">
-                    <x-jet-label for="form.name" value="{{ __('Name') }}" />
-                    <x-jet-input id="form.name" type="text" class="block w-full" wire:model.defer="form.name"
-                        autocomplete="form.name" placeholder="Nome do cliente" />
-                    <x-jet-input-error for="form.name" class="mt-2" />
-                </div>
-
-                <!-- Email -->
-                <div class="mt-2">
-                    <x-jet-label for="form.email" value="{{ __('Email') }}" />
-                    <x-jet-input id="form.email" type="email" class="block w-full" wire:model.defer="form.email"
-                        autocomplete="form.email" placeholder="E-mail" />
-                    <x-jet-input-error for="form.email" class="mt-2" />
-                </div>
-
-                <!-- Password -->
-                <div class="mt-2 gap-2">
-                    <x-jet-label for="password" value="{{ __('Senha') }}" />
-                    <x-jet-input id="password" type="password" class="block w-full" wire:model.defer="password"
-                        autocomplete="password" placeholder="Senha" />
-                    <x-jet-input-error for="password" class="mt-2" />
-                </div>
-
-                <!-- Roles-->
-                <div class="mt-2">
-                    <x-jet-label for="form.roles" value="{{ __('Roles') }}" />
-                    @foreach ($allRoles as $id => $role)
-                        <label for="{{ $id }}" class="flex items-center">
-                            <x-jet-checkbox name="roles[]" id="{{ $id }}" wire:model.defer="roles"
-                                value="{{ $id }}" />
-                            <span class="ml-2 text-sm text-gray-600">{{ $role }}</span>
-                        </label>
-                    @endforeach
-                </div>
-
-                <div class="mt-2"></div>
-
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$toggle('openModalCreate')" wire:loading.attr="disabled">
-                {{ __('Cancelar') }}
-            </x-jet-secondary-button>
-
-            <x-jet-button class="ml-3" wire:click="save" wire:loading.attr="disabled">
-                {{ __('Salvar') }}
-            </x-jet-button>
-        </x-slot>
-    </x-jet-dialog-modal>
 </div>

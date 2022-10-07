@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -14,7 +15,7 @@ class Users extends Component
 
     public $search;
     public User $form;
-    public $roles = 2;
+    public array $roles = [];
     public string $password = '';
     public $openModalDelete = false;
     public $openModalCreate = false;
@@ -64,13 +65,8 @@ class Users extends Component
     public function doubleClick(User $form)
     {
         $this->form = $form;
-        $this->openModalCreate = true;
-        $this->clearValidation();
-    }
-
-    public function edit(User $user)
-    {
-        $this->form = $user;
+        $this->form->load('roles');
+        $this->roles = $form->roles->pluck('id')->toArray();
         $this->openModalCreate = true;
         $this->clearValidation();
     }
@@ -95,7 +91,7 @@ class Users extends Component
         $this->openModalCreate = false;
         $this->dispatchBrowserEvent('swal:toast', [
             'type' => 'success',
-            'title' => 'Usuário cadastrado com sucesso!',
+            'title' => 'Usuário salvo com sucesso!',
             'text' => '',
         ]);
     }
@@ -135,6 +131,8 @@ class Users extends Component
     {
 
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $this->allRoles = Role::pluck('title', 'id');
 
         return view('livewire.users');
     }
