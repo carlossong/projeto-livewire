@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('Master10')
         ]);
 
-        \App\Models\User::factory(150)->create();
+        // \App\Models\User::factory(150)->create();
 
         $this->call([
             PermissionSeeder::class,
