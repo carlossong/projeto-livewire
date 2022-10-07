@@ -117,7 +117,7 @@ class Users extends Component
 
     public function getUsersProperty()
     {
-        return User::where('name', 'like', '%'.$this->search.'%')->orWhere('email', 'like', '%'.$this->search.'%')->orderBy('name')->paginate(10);
+        return User::with('roles')->where('name', 'like', '%'.$this->search.'%')->orWhere('email', 'like', '%'.$this->search.'%')->orderBy('name')->paginate(10);
     }
 
     public function render()

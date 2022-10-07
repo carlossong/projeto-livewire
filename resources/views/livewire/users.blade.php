@@ -36,11 +36,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="shadow-lg rounded-lg overflow-hidden">
-                    <button wire:click='newUser' class="ml-4 relative inline-flex items-center justify-center p-0.5 my-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-indigo-400 to-blue-600 group-hover:from-indigo-400 group-hover:to-blue-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-indigo-200">
-                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+                    <button wire:click='newUser'
+                        class="ml-4 relative inline-flex items-center justify-center p-0.5 my-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-indigo-400 to-blue-600 group-hover:from-indigo-400 group-hover:to-blue-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-indigo-200">
+                        <span
+                            class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
                             Novo Usuário
                         </span>
-                      </button>
+                    </button>
                     <x-jet-input type="text" wire:model.debounce.300ms="search" id="search" class="m-4"
                         type="text" placeholder="Buscar usuário" autocomplete="nope" />
                     <div x-data class="p-4 grid md:grid-cols-2 gap-4">
@@ -48,14 +50,21 @@
                             <div x-data="{ opened_tab: null }" class="flex flex-col">
                                 <div class="flex flex-col border rounded shadow mb-2">
                                     <div @click="opened_tab = opened_tab == {{ $index }} ? null : {{ $index }} "
-                                        class="text-sm font-medium text-gray-700 hover:text-gray-900 p-4 cursor-pointer flex hover:text-indigo-600 hover:text-lg">
+                                        class="text-sm font-medium text-gray-700 hover:text-gray-900 p-4 cursor-pointer flex justify-between hover:text-indigo-600 hover:text-lg">
                                         {{ $user->name }}
+                                        @foreach ($user->roles as $role)
+                                            <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-lg bg-green-100 text-green-800 items-center">
+                                                {{ $role->title }}
+                                            </span>
+                                        @endforeach
                                     </div>
                                     <div x-show="opened_tab=={{ $index }}" class="p-4 pb-4 text-gray-500">
                                         <div class="flex justify-between"
                                             x-on:dblclick="$wire.doubleClick('{{ $user->id }}')">
                                             <p>{{ $user->email }}</p>
-                                            <svg wire:click='confirmingUserDeletion({{ $user->id }})' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            <svg wire:click='confirmingUserDeletion({{ $user->id }})'
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor"
                                                 class="w-6 h-6 hover:text-red-500">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -74,8 +83,8 @@
             </div>
         </div>
     </div>
-     <!-- New User Modal -->
-     <x-jet-dialog-modal wire:model="openModalCreate">
+    <!-- New User Modal -->
+    <x-jet-dialog-modal wire:model="openModalCreate">
         <x-slot name="title">
             @if ($form->id)
                 {{ __('Editar Usuário: ') }} {{ $form->name }}

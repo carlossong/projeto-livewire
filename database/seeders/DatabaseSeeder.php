@@ -19,6 +19,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => bcrypt('Master10')
         ]);
+
         \App\Models\User::factory(150)->create();
+
+        $this->call([
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            PermissionRoleTableSeeder::class,
+            RoleUserTableSeeder::class,
+        ]);
     }
 }
