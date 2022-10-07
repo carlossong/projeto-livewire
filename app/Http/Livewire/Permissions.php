@@ -3,26 +3,22 @@
 namespace App\Http\Livewire;
 
 use App\Models\Permission;
-use App\Models\Role;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
-class Roles extends Component
+class Permissions extends Component
 {
     public $search;
-    public Role $form;
-    public array $permissions = [];
+    public Permission $form;
     public $openModalDelete = false;
     public $openModalCreate = false;
-    public ?Role $roleToRemove = null;
+    public ?Permission $roleToRemove = null;
     protected $listeners = ['delete'];
 
-    public function doubleClick(Role $form)
+    public function edit(Permission $form)
     {
         $this->form = $form;
-        $this->form->load('permissions');
-        $this->permissions = $form->permissions()->pluck('id')->toArray();
         $this->openModalCreate = true;
         $this->clearValidation();
     }
@@ -38,11 +34,11 @@ class Roles extends Component
         ];
     }
 
-    public function newRole(Role $role)
+    public function newPermission(Permission $permission)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $this->form = $role;
+        $this->form = $permission;
         $this->openModalCreate = true;
         $this->clearValidation();
     }
@@ -51,25 +47,24 @@ class Roles extends Component
     {
         $this->validate();
         $this->form->save();
-        $this->form->permissions()->sync($this->permissions);
         $this->openModalCreate = false;
         $this->dispatchBrowserEvent('swal:toast', [
             'type' => 'success',
-            'title' => 'Hierarquia salva com sucesso!',
+            'title' => 'Permissão salva com sucesso!',
             'text' => '',
         ]);
     }
 
-    public function confirmingRoleDeletion(Role $role)
+    public function confirmingPermissionDeletion(Permission $permission)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $this->roleToRemove = $role;
+        $this->permissionToRemove = $permission;
         $this->dispatchBrowserEvent('swal:confirm', [
             'type' => 'warning',
-            'title' => 'Remover ' . $role->title .'?',
+            'title' => 'Remover ' . $permission->title .'?',
             'text' => '',
-            'id' => $role->id,
+            'id' => $permission->id,
         ]);
     }
 
@@ -77,27 +72,26 @@ class Roles extends Component
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $this->roleToRemove->delete();
+        $this->permissionToRemove->delete();
         $this->dispatchBrowserEvent('swal:toast', [
             'type' => 'success',
-            'title' => 'Hierarquia removida com sucesso!',
+            'title' => 'Permissão removida com sucesso!',
             'text' => '',
         ]);
     }
 
-    public function mount(Role $form)
+    public function mount(Permission $form)
     {
         $this->form = $form;
     }
 
-    public function getRolesProperty()
+    public function getPermissionsProperty()
     {
-        return Role::with('permissions')->where('title', 'like', '%'.$this->search.'%')->orWhere('id', 'like', '%'.$this->search.'%')->orderBy('title')->paginate(10);
+        return Permission::where('title', 'like', '%'.$this->search.'%')->orWhere('id', 'like', '%'.$this->search.'%')->orderBy('title')->paginate(10);
     }
 
     public function render()
     {
-        $this->allPermissions = Permission::pluck('title', 'id');
-        return view('livewire.roles');
+        return view('livewire.permissions');
     }
 }

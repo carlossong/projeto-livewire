@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Permissions;
 use App\Http\Livewire\Roles;
 use App\Http\Livewire\Users;
 use Illuminate\Support\Facades\Route;
@@ -31,4 +32,5 @@ Route::middleware([
 
     Route::get('usuarios', Users::class)->name('users');
     Route::get('hierarquias', Roles::class)->name('roles');
+    Route::get('permissoes', Permissions::class)->name('permissions');
 });
