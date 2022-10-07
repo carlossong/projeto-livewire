@@ -50,7 +50,7 @@
                             <div x-data="{ opened_tab: null }" class="flex flex-col">
                                 <div class="flex flex-col border rounded shadow mb-2">
                                     <div @click="opened_tab = opened_tab == {{ $index }} ? null : {{ $index }} "
-                                        class="text-sm font-medium text-gray-700 hover:text-gray-900 p-4 cursor-pointer flex justify-between hover:text-indigo-600 hover:text-lg">
+                                        class="text-sm font-medium text-gray-700 hover:text-gray-900 p-4 cursor-pointer flex justify-between hover:text-indigo-600 hover:text-base">
                                         {{ $user->name }}
                                         @foreach ($user->roles as $role)
                                             <span

@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,6 +14,7 @@ class Users extends Component
 
     public $search;
     public User $form;
+    public $roles = 2;
     public string $password = '';
     public $openModalDelete = false;
     public $openModalCreate = false;
@@ -74,6 +77,8 @@ class Users extends Component
 
     public function newUser(User $user)
     {
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $this->form = $user;
         $this->openModalCreate = true;
         $this->clearValidation();
@@ -86,15 +91,19 @@ class Users extends Component
             $this->form->password = bcrypt($this->password);
         }
         $this->form->save();
+        $this->form->roles()->sync($this->roles);
         $this->openModalCreate = false;
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => 'success',
-            'message' => 'Usuário salvo com Sucesso!'
+        $this->dispatchBrowserEvent('swal:toast', [
+            'type' => 'success',
+            'title' => 'Usuário cadastrado com sucesso!',
+            'text' => '',
         ]);
     }
 
     public function confirmingUserDeletion(User $user)
     {
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $this->userToRemove = $user;
         $this->dispatchBrowserEvent('swal:confirm', [
             'type' => 'warning',
@@ -106,6 +115,8 @@ class Users extends Component
 
     public function delete()
     {
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $this->userToRemove->delete();
         $this->dispatchBrowserEvent('swal:toast', [
             'type' => 'success',
@@ -122,6 +133,9 @@ class Users extends Component
 
     public function render()
     {
+
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return view('livewire.users');
     }
 }
