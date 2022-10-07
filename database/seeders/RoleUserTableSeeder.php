@@ -16,8 +16,5 @@ class RoleUserTableSeeder extends Seeder
     public function run()
     {
         User::findOrFail(1)->roles()->sync(1);
-        for ($i = 2; $i <= 150; $i++) {
-            User::findOrFail($i)->roles()->sync(2);
-        }
     }
 }
